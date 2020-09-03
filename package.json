@@ -1,10 +1,10 @@
 {
-  "name": "analysis-example-geofence",
+  "name": "analysis-example-downlinkDashboard",
   "version": "1.0.1",
   "private": true,
-  "description": "Check if location point is inside geofence",
+  "description": "Send downlink to any NS server supported at TagoIO",
   "main": "analysis.js",
-  "repository": "tago-io/analysis-example-geofence",
+  "repository": "tago-io/analysis-example-downlinkDashboard",
   "author": "Tago LLC",
   "license": "MIT",
   "dependencies": {
