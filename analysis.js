@@ -70,12 +70,12 @@ async function init(context, scope) {
   };
 
   await axios.post(`https://${connector.options.middleware}/downlink`, data)
+   .then((result) => {
+     context.log(`Downlink accepted with status ${result.status}`);
+   })
    .catch((error) => {
      context.log(`Downlink failed with status ${error.response.status}`);
      context.log(error.response.data || JSON.stringify(error));
-   })
-   .then((result) => {
-     context.log(`Downlink accepted with status ${result.status}`);
    });
 }
 
