@@ -11,6 +11,8 @@
  **
  ** account_token: Your account token. Check bellow how to get this.
  ** default_PORT: The default port to be used if not sent by the dashboard.
+ ** device_id: The default device id to be used if not sent by the dashboard (OPTIONAL).
+ ** payload: The default payload to be used if not sent by the dashboard (OPTIONAL).
  **
  ** Steps to generate an account_token:
  ** 1 - Enter the following link: https://admin.tago.io/account/
