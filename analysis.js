@@ -44,7 +44,7 @@ async function init(context, scope) {
   if (!device_id) return context.log('Device ID <origin> not found in the variables sent by the widget/dashboard.');
 
   // Find the token containing the authorization code used.
-  const device_tokens = await account.devices.tokenList(device_id, 1, 10, {}, ['serie_number', 'last_authorization']);
+  const device_tokens = await account.devices.tokenList(device_id, { page: 1, fields: ['name', 'serie_number', 'last_authorization'], amount: 10 });
   const token = device_tokens.find(x => x.serie_number && x.last_authorization);
   if (!token) return context.log("Couldn't find a token with serial/authorization for this device");
 
@@ -59,11 +59,7 @@ async function init(context, scope) {
   // Set the parameters for the device. Some NS like Everynet need this.
   const params = await account.devices.paramList(device_id);
   const downlink_param = params.find(x => x.key === 'downlink');
-  if (downlink_param) {
-    await account.devices.paramEdit(device_id, downlink_param.id, { value: payload, sent: false });
-  } else {
-    await account.devices.paramCreate(device_id, { key: 'downlink', value: payload, sent: false });
-  }
+  await account.devices.paramSet(device_id, { id: downlink_param ? downlink_param.id : null, key: 'downlink', value: String(payload), sent: false });
 
   context.log('Trying to send the downlink');
   const data = {
@@ -76,7 +72,7 @@ async function init(context, scope) {
   await axios.post(`https://${connector.options.middleware}/downlink`, data)
    .catch((error) => {
      context.log(`Downlink failed with status ${error.response.status}`);
-     context.log(error.response.data : JSON.stringify(error));
+     context.log(error.response.data || JSON.stringify(error));
    })
    .then((result) => {
      context.log(`Downlink accepted with status ${result.status}`);
