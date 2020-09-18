@@ -61,7 +61,7 @@ async function init(context, scope) {
   // Set the parameters for the device. Some NS like Everynet need this.
   const params = await account.devices.paramList(device_id);
   const downlink_param = params.find(x => x.key === 'downlink');
-  await account.devices.paramSet(device_id, { id: downlink_param ? downlink_param.id : null, key: 'downlink', value: String(payload), sent: false });
+  await account.devices.paramSet(device_id, { id: downlink_param ? downlink_param.id : null, key: 'downlink', value: String(payload.value), sent: false });
 
   context.log('Trying to send the downlink');
   const data = {
