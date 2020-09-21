@@ -56,7 +56,6 @@ async function init(context, scope) {
 
   // Get the network information with the NS URL for the Downlink
   const network = await account.integration.networks.info(network_id, ['id', 'middleware_endpoint', "name"]);
-  context.log(network);
   if (!network.middleware_endpoint) return context.log("Couldn't find a network middleware for this device.");
 
   // Set the parameters for the device. Some NS like Everynet need this.
