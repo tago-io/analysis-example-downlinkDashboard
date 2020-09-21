@@ -51,17 +51,19 @@ async function init(context, scope) {
   if (!token) return context.log("Couldn't find a token with serial/authorization for this device");
 
   // Get the connector ID from the device
-  const { connector: connector_id } = await account.devices.info(device_id);
-  if (!connector_id) return context.log('Device is not using a connector.');
+  const { network: network_id } = await account.devices.info(device_id);
+  if (!network_id) return context.log('Device is not using a network.');
 
-  // Get the connector information with the NS URL for the Downlink
-  const connector = await account.connector.info(connector_id);
-  if (!connector.options.middleware) return context.log("Couldn't find a connector middleware for this device.");
+  // Get the network information with the NS URL for the Downlink
+  const network = await account.integration.networks.info(network_id, ['id', 'middleware_endpoint', "name"]);
+  context.log(network);
+  if (!network.middleware_endpoint) return context.log("Couldn't find a network middleware for this device.");
 
   // Set the parameters for the device. Some NS like Everynet need this.
   const params = await account.devices.paramList(device_id);
-  const downlink_param = params.find(x => x.key === 'downlink');
-  await account.devices.paramSet(device_id, { id: downlink_param ? downlink_param.id : null, key: 'downlink', value: String(payload.value), sent: false });
+  let downlink_param = params.find(x => x.key === 'downlink');
+  downlink_param = { id: downlink_param ? downlink_param.id : null, key: 'downlink', value: String(payload.value), sent: false };
+  await account.devices.paramSet(device_id, downlink_param);
 
   context.log('Trying to send the downlink');
   const data = {
@@ -71,7 +73,7 @@ async function init(context, scope) {
     port: port.value,
   };
 
-  await axios.post(`https://${connector.options.middleware}/downlink`, data)
+  await axios.post(`https://${network.middleware_endpoint}/downlink`, data)
    .then((result) => {
      context.log(`Downlink accepted with status ${result.status}`);
    })
