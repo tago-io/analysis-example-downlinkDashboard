@@ -37,13 +37,13 @@ async function init(context, scope) {
   const account = new Account({ token: env.account_token });
 
   // Get the variables form_payload and form_port sent by the widget/dashboard.
-  const payload = scope.find(x => x.variable === 'form_payload') || { value: env.payload, origin: env.device_id };
+  const payload = scope.find(x => x.variable === 'form_payload') || { value: env.payload, device: env.device_id };
   const port = scope.find(x => x.variable === 'form_port') || { value: env.default_PORT };
-  if (!payload || !payload.value || !payload.origin) return context.log('Missing "form_payload" in the data scope.');
+  if (!payload || !payload.value || !payload.device) return context.log('Missing "form_payload" in the data scope.');
   else if (!port || !port.value) return context.log('Missing "form_port" in the data scope.');
 
-  const device_id = payload.origin; // All variables that trigger the analysis have the "origin" parameter, with the TagoIO Device ID.
-  if (!device_id) return context.log('Device ID <origin> not found in the variables sent by the widget/dashboard.');
+  const device_id = payload.device; // All variables that trigger the analysis have the "device" parameter, with the TagoIO Device ID.
+  if (!device_id) return context.log('Device parameter <device> not found in the variables sent by the widget/dashboard.');
 
   // Find the token containing the authorization code used.
   const device_tokens = await account.devices.tokenList(device_id, { page: 1, fields: ['name', 'serie_number', 'last_authorization'], amount: 10 });
