@@ -10,19 +10,18 @@
  ** Environment Variables
  ** In order to use this analysis, you must setup the Environment Variable table.
  **
- ** account_token: Your account token. Check bellow how to get this.
  ** default_PORT: The default port to be used if not sent by the dashboard.
  ** device_id: The default device id to be used if not sent by the dashboard (OPTIONAL).
  ** payload: The default payload to be used if not sent by the dashboard (OPTIONAL).
  **
- ** Steps to generate an account_token:
- ** 1 - Enter the following link: https://admin.tago.io/account/
- ** 2 - Select your Profile.
- ** 3 - Enter Tokens tab.
- ** 4 - Generate a new Token with Expires Never.
- ** 5 - Press the Copy Button and place at the Environment Variables tab of this analysis.
+ ** How to use:
+ ** To analysis works, you need to add a new policy in your account. Steps to add a new policy:
+ **  1 - Click the button "Add Policy" at this url: https://admin.tago.io/am;
+ **  2 - In the Target selector, with the field set as "ID", choose your Analysis in the list;
+ **  3 - Click the "Click to add a new permission" element and select "Device" with the rule "Access" with the field as "Any";
+ **  4 - To save your new Policy, click the save button in the bottom right corner;
  */
-const { Analysis, Account, Utils } = require("@tago-io/sdk");
+const { Analysis, Utils, Resources } = require("@tago-io/sdk");
 
 async function init(context, scope) {
   // Remove code below if you want to trigger by schedule action and using environment variables.
@@ -31,18 +30,6 @@ async function init(context, scope) {
   }
 
   context.log("Downlink analysis started");
-  // Get the environment variables.
-  const environment = Utils.envToJson(context.environment);
-  if (!environment.account_token) {
-    return context.log('Missing "account_token" environment variable');
-  } else if (environment.account_token.length !== 36) {
-    return context.log('Invalid "account_token" in the environment variable');
-  }
-
-  // Setup your profile-token from the environment variable
-  // IMPORTANT: You must generate the profile token from your profile settings.
-  //            Any other token will generate an Authorization Denied error.
-  const account = new Account({ token: environment.account_token });
 
   // Get the variables form_payload and form_port sent by the widget/dashboard.
   let payload = scope.find((x) => x.variable === "form_payload");
@@ -71,7 +58,9 @@ async function init(context, scope) {
     return context.log("Device key <device> not found in the variables sent by the widget/dashboard.");
   }
 
-  const result = await Utils.sendDownlink(account, device_id, {
+  const resources = new Resources(context.token);
+
+  const result = await Utils.sendDownlink(resources, device_id, {
     payload: payload.value,
     port: Number(port.value),
     confirmed: false,
