@@ -23,7 +23,7 @@
  */
 const { Analysis, Utils, Resources } = require("@tago-io/sdk");
 
-async function init(context, scope) {
+async function startAnalysis(context, scope) {
   // Remove code below if you want to trigger by schedule action and using environment variables.
   if (!scope[0]) {
     return context.log("This analysis must be triggered by a widget.");
@@ -68,5 +68,4 @@ async function init(context, scope) {
 
   console.log(result);
 }
-
-module.exports = new Analysis(init);
+Analysis.use(startAnalysis);
