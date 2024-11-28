@@ -68,4 +68,8 @@ async function startAnalysis(context, scope) {
 
   console.log(result);
 }
+
 Analysis.use(startAnalysis);
+
+// To run analysis on your machine (external)
+// Analysis.use(myAnalysis, { token: "YOUR-TOKEN" });
