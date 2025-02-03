@@ -29,6 +29,8 @@ Steps to add a new policy:
 
    2 - In the Target selector, with the field set as "ID", choose your Analysis in the list;
 
-   3 - Click the "Click to add a new permission" element and select "Device" with the rule "Access" with the field as "Any";
+   3 - Click the "Click to add a new permission" element and select "Device" with the rule "Access, Edit, Token Access" with the field as "Any";
 
-   4 - To save your new Policy, click the save button in the bottom right corner;<br>
+   4 - Click the "Click to add a new permission" element and select "Network" with the rule "Access" with the field as "Any";
+
+   5 - To save your new Policy, click the save button in the bottom right corner;<br>
