@@ -16,10 +16,11 @@
  **
  ** How to use:
  ** To analysis works, you need to add a new policy in your account. Steps to add a new policy:
- **  1 - Click the button "Add Policy" at this url: https://admin.tago.io/am;
- **  2 - In the Target selector, with the field set as "ID", choose your Analysis in the list;
- **  3 - Click the "Click to add a new permission" element and select "Device" with the rule "Access" with the field as "Any";
- **  4 - To save your new Policy, click the save button in the bottom right corner;
+ ** 1 - Click the button "Add Policy" at this url: https://admin.tago.io/am;
+ ** 2 - In the Target selector, with the field set as "ID", choose your Analysis in the list;
+ ** 3 - Click the "Click to add a new permission" element and select "Device" with the rule "Access, Edit, Token Access" with the field as "Any";
+ ** 4 - Click the "Click to add a new permission" element and select "Network" with the rule "Access" with the field as "Any";
+ **
  */
 const { Analysis, Utils, Resources } = require("@tago-io/sdk");
 
